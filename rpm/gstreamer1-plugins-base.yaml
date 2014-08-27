@@ -1,0 +1,74 @@
+Name: gstreamer1-plugins-base
+Version: 1.4.1
+Release: 1
+Group: Applications/Multimedia
+License: LGPLv2+
+Summary: GStreamer streaming media framework base plugins
+Description: |
+  GStreamer is a streaming media framework, based on graphs of filters which
+  operate on media data. Applications using this library can do anything
+  from real-time sound processing to playing videos, and just about anything
+  else media-related.  Its plugin-based architecture means that new data
+  types or processing capabilities can be added simply by installing new
+  plug-ins.
+URL: http://gstreamer.freedesktop.org/
+Sources:
+    - "%{name}-%{version}.tar.xz"
+Patches:
+    - 0001-missing-plugins-Remove-the-mpegaudioversion-field.patch
+SetupOptions: -q -n %{name}-%{version}/upstream
+
+Macros:
+    - majorminor;1.0
+
+PkgBR:
+    # TODO: Package cdparanoia
+    # - cdparanoia-devel
+    - pkgconfig
+    - chrpath
+    - intltool
+PkgConfigBR:
+    - gstreamer-1.0
+    - iso-codes
+    - alsa
+    - ogg >= 1.0
+    - libvisual-0.4
+    - theora >= 1.1
+    - vorbis >= 1.0
+    - xv
+    - orc-0.4 >= 0.4.18
+    - pango
+
+#Requires:
+#    - iso-codes
+
+NoAutoLocale: true
+
+FilesInput: gst-plugins-base-%{majorminor}.lang
+
+ConfigOptions:
+    - --with-package-name='Maui GStreamer package'
+    - --with-package-origin='http://www.maui-project.org/'
+    - --enable-experimental
+    - --enable-gtk-doc=no
+    - --enable-introspection=no
+    - --enable-orc
+    - --disable-freetypetest
+    - ix86:--with-audioresample-format=float
+    - armv7:--with-audioresample-format=float
+    - armv6:--with-audioresample-format=float
+    - armv5:--with-audioresample-format=int
+
+SubPackages:
+    - Name: devel
+      Summary: GStreamer Base Plugins Development files
+      Group: Development/Libraries
+      Description: |
+        The %{name}-devel package contains libraries and header files
+        for developing applications that use %{name}.
+
+    - Name: tools
+      Summary: Tools for GStreamer streaming media framework base plugins
+      Group: Applications/Multimedia
+      Description: |
+        This package contains the command-line tools for the base plugins.
